@@ -1,6 +1,6 @@
 #include "GameLayer.h"
 
-GameLayer::GameLayer(Game* game):Layer(game) { 	//llama al constructor del padre : Layer(renderer)
+GameLayer::GameLayer(Game* game) :Layer(game) { 	//llama al constructor del padre : Layer(renderer)
 
 	init();
 }
@@ -9,7 +9,6 @@ void GameLayer::init() {
 	audioBackground = new Audio(AUDIO_AMBIENTE, true);
 	audioBackground->play();
 
-	//EXTENSION
 	coins = 0;
 	textCoins = new Text("coin", WIDTH * 0.83, HEIGHT * 0.05, game);
 	textCoins->content = to_string(coins);
@@ -26,8 +25,8 @@ void GameLayer::init() {
 	players.push_back(player2);
 
 	background = new Background(FONDO, WIDTH * 0.5, HEIGHT * 0.5, -1, game);
-	
-	backgroundCoins = new Actor(COIN_ICON, WIDTH * 0.76, HEIGHT * 0.05, 24, 24, game); //EXTENSION
+
+	backgroundCoins = new Actor(COIN_ICON, WIDTH * 0.76, HEIGHT * 0.05, 24, 24, game);
 	backgroungHearts.push_back(new Actor(HEART_ICON, WIDTH * 0.53, HEIGHT * 0.06, 24, 20, game));
 	backgroungHearts.push_back(new Actor(HEART_ICON, WIDTH * 0.6, HEIGHT * 0.06, 24, 20, game));
 	backgroungHearts.push_back(new Actor(HEART_ICON, WIDTH * 0.67, HEIGHT * 0.06, 24, 20, game));
@@ -37,14 +36,14 @@ void GameLayer::init() {
 	backgroundPoints = new Actor(POINTS_ICON, WIDTH * 0.9, HEIGHT * 0.05, 24, 24, game);
 
 	coinsList.clear();
-	spaceships.clear(); 
-	asteroids.clear(); 
-	projectiles.clear(); 
+	spaceships.clear();
+	asteroids.clear();
+	projectiles.clear();
 	bombs.clear();
 
 	spaceships.push_back(new Spaceship(ICONO_ENEMIGO, 300, 50, 36, 40, game));
 
-	bombs.push_back(new Bomb(450, 100, game));
+	//bombs.push_back(new Bomb(450, 100, game));
 }
 
 void GameLayer::processControls() {
@@ -54,7 +53,7 @@ void GameLayer::processControls() {
 		keysToControls(event);
 	}
 
-	// Disparar PLAYER1
+	// Disparar Player1
 	if (controlShoot) {
 		Projectile* newProjectile = player->shoot();
 		if (newProjectile != NULL) {
@@ -62,7 +61,7 @@ void GameLayer::processControls() {
 		}
 	}
 
-	// Disparar PLAYER2
+	// Disparar Player2
 	if (controlShoot2) {
 		Projectile* newProjectile = player2->shoot();
 		if (newProjectile != NULL) {
@@ -70,7 +69,7 @@ void GameLayer::processControls() {
 		}
 	}
 
-	// Eje X PLAYER1
+	// Eje X Player1
 	if (controlMoveX > 0) {
 		player->moveX(1);
 	}
@@ -81,7 +80,7 @@ void GameLayer::processControls() {
 		player->moveX(0);
 	}
 
-	// Eje Y PLAYER1
+	// Eje Y Player1
 	if (controlMoveY > 0) {
 		player->moveY(1);
 	}
@@ -92,7 +91,7 @@ void GameLayer::processControls() {
 		player->moveY(0);
 	}
 
-	// Eje X PLAYER2
+	// Eje X Player2
 	if (controlMoveX2 > 0) {
 		player2->moveX(1);
 	}
@@ -103,7 +102,7 @@ void GameLayer::processControls() {
 		player2->moveX(0);
 	}
 
-	// Eje Y PLAYER2
+	// Eje Y Player2
 	if (controlMoveY2 > 0) {
 		player2->moveY(1);
 	}
@@ -143,7 +142,7 @@ void GameLayer::update() {
 
 	for (auto const& asteroid : asteroids) {
 		asteroid->update();
-	}	
+	}
 
 	for (auto const& bomb : bombs) {
 		bomb->update();
@@ -182,14 +181,15 @@ void GameLayer::update() {
 		int rX = (rand() % (600 - 500)) + 1 + 500;
 		int rY = (rand() % (300 - 60)) + 1 + 60;
 		bombs.push_back(new Bomb(rX, rY, game));
-		newBombTime = 300;
+		newBombTime = 400;
 	}
 
 	// Colisiones: Player - Enemy
 	for (auto const& spaceship : spaceships) {
 		for (auto const& onePlayer : players) {
-			if (onePlayer->isOverlap(spaceship)) { //EXTENSION: Player tiene corazones todavía
+			if (onePlayer->isOverlap(spaceship)) {
 				if (!onePlayer->invincible) {
+
 					cout << "La nave ha colisionado con un enemigo" << endl;
 
 					if (onePlayer->hearts >= 1) {
@@ -219,13 +219,14 @@ void GameLayer::update() {
 	//EXTENSION: Colisones: Player - Coin
 	for (auto const& coin : coinsList) {
 		if ((player->isOverlap(coin) || player2->isOverlap(coin)) && coin->received == false) {
+			
 			bool pInList = std::find(deleteCoins.begin(),
 				deleteCoins.end(),
 				coin) != deleteCoins.end();
 
 			if (!pInList) {
 				deleteCoins.push_back(coin);
-			}			
+			}
 
 			coin->state = game->stateDead;
 			coin->received = true;
@@ -259,9 +260,8 @@ void GameLayer::update() {
 				if (!pInList) {
 					deleteProjectiles.push_back(projectile);
 				}
-
-				//Para que se ponga el estado y empiece a morirse
-				enemy->impacted();
+								
+				enemy->impacted(); //Empieza a morir
 				cout << "Impactado con proyectil" << endl;
 				points++;
 				textPoints->content = to_string(points);
@@ -270,7 +270,7 @@ void GameLayer::update() {
 	}
 
 	for (auto const& enemy : spaceships) {
-		if (enemy->state == game->stateDead) {			
+		if (enemy->state == game->stateDead) {
 			bool eInList = std::find(deleteEnemies.begin(),
 				deleteEnemies.end(),
 				enemy) != deleteEnemies.end();
@@ -293,8 +293,7 @@ void GameLayer::update() {
 					deleteProjectiles.push_back(projectile);
 				}
 
-				//Para que se ponga el estado y empiece a morirse
-				asteroid->impacted();
+				asteroid->impacted(); //Empieza a morirse
 				cout << "Asteroide destruido" << endl;
 				points++;
 				textPoints->content = to_string(points);
@@ -319,12 +318,13 @@ void GameLayer::update() {
 		for (auto const& onePlayer : players) {
 
 			if (onePlayer->isOverlap(asteroid)) {
-				if (!onePlayer->invincible) {		
+				if (!onePlayer->invincible) {
 					cout << "La nave ha colisionado con un asteroide" << endl;
 
-					if (onePlayer->hearts == HEARTS - 2) { //Remove one life						
+					//Quitar 1 corazón	
+					if (onePlayer->hearts == HEARTS - 2) { 					
 						onePlayer->hearts--;
-						
+
 						if (onePlayer->image == JUGADOR1) {
 							backgroungHearts.pop_front();
 						}
@@ -332,8 +332,10 @@ void GameLayer::update() {
 							backgroungHeartsBlue.pop_front();
 						}
 					}
-					else if (onePlayer->hearts >= HEARTS - 1) { //Remove two lives
-+						onePlayer->hearts--;
+
+					//Quitar 2 corazones	
+					else if (onePlayer->hearts >= HEARTS - 1) {
+						+onePlayer->hearts--;
 						onePlayer->hearts--;
 
 						if (onePlayer->image == JUGADOR1) {
@@ -344,7 +346,7 @@ void GameLayer::update() {
 							backgroungHeartsBlue.pop_front();
 							backgroungHeartsBlue.pop_front();
 						}
-					}		
+					}
 
 					asteroid->impacted();
 					onePlayer->setInvincible(true);
@@ -371,7 +373,7 @@ void GameLayer::update() {
 			}
 		}
 	}
-	
+
 	for (auto const& onePlayer : players) {
 		if (onePlayer->state == game->stateDead) {
 			bool eInList = std::find(deletePlayers.begin(),
@@ -383,8 +385,6 @@ void GameLayer::update() {
 			}
 		}
 	}
-
-
 
 	//EXTENSION: Colisones: Player - Bomb
 	for (auto const& bomb : bombs) {
@@ -400,7 +400,7 @@ void GameLayer::update() {
 				for (auto const& asteroid : asteroids) {
 					asteroid->impacted();
 				}
-				
+
 			}
 		}
 	}
@@ -416,7 +416,6 @@ void GameLayer::update() {
 			}
 		}
 	}
-
 
 	for (auto const& onePlayer : deletePlayers) {
 		players.remove(onePlayer);
@@ -493,11 +492,9 @@ void GameLayer::draw() {
 	backgroundPoints->draw();
 	textPoints->draw();
 
-	//EXTENSION
-	backgroundCoins->draw(); 
+	backgroundCoins->draw();
 	textCoins->draw();
 
-	//EXTENSION
 	for (auto const& heart : backgroungHearts) {
 		heart->draw();
 	}
@@ -512,7 +509,8 @@ void GameLayer::draw() {
 void GameLayer::keysToControls(SDL_Event event) {
 	if (event.type == SDL_KEYDOWN) {
 		int code = event.key.keysym.sym;
-		// Pulsada
+
+		// Tecla pulsada
 		switch (code) {
 		case SDLK_ESCAPE:
 			game->loopActive = false;
@@ -521,7 +519,7 @@ void GameLayer::keysToControls(SDL_Event event) {
 			game->scale();
 			break;
 
-		//PLAYER1
+			//Player1
 		case SDLK_d: // derecha
 			controlMoveX = 1;
 			break;
@@ -538,8 +536,7 @@ void GameLayer::keysToControls(SDL_Event event) {
 			controlShoot = true;
 			break;
 
-
-		//PLAYER2
+			//Player2
 		case SDLK_RIGHT: // derecha
 			controlMoveX2 = 1;
 			break;
@@ -554,15 +551,16 @@ void GameLayer::keysToControls(SDL_Event event) {
 			break;
 		case SDLK_LESS: // dispara
 			controlShoot2 = true;
-			break;			
+			break;
 		}
 	}
 
 	if (event.type == SDL_KEYUP) {
 		int code = event.key.keysym.sym;
-		// Levantada
+
+		// Tecla levantada
 		switch (code) {
-		//PLAYER1
+			//Player1
 		case SDLK_d: // derecha
 			if (controlMoveX == 1) {
 				controlMoveX = 0;
@@ -587,7 +585,7 @@ void GameLayer::keysToControls(SDL_Event event) {
 			controlShoot = false;
 			break;
 
-		//PLAYER2
+		//Player2
 		case SDLK_RIGHT: // derecha
 			if (controlMoveX2 == 1) {
 				controlMoveX2 = 0;
@@ -615,11 +613,8 @@ void GameLayer::keysToControls(SDL_Event event) {
 	}
 }
 
-void GameLayer :: checkPlayersAlive() {
+void GameLayer::checkPlayersAlive() {
 	if (player->hearts <= 0 && player2->hearts <= 0) {
-		cout << "PLAYER 1 HEARTS" + player->hearts << endl;
-		cout << "PLAYER 2 HEARTS" + player2->hearts << endl;
-
 		cout << "GAME OVER" << endl;
 		cout << endl;
 		cout << "REINICIANDO JUEGO" << endl;

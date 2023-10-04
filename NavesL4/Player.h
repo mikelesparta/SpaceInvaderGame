@@ -4,6 +4,7 @@
 #include "Projectile.h" 
 #include "Audio.h"
 #include "Animation.h" // incluir animacion 
+#include "Enemy.h"
 
 #include <chrono>
 #include <thread>
@@ -22,6 +23,7 @@ class Player : public Actor
 {
 public:
 	Player(string filename1, string filename2, float x, float y, Game* game);
+
 	Projectile* shoot();
 	void update();
 	void moveX(float axis);
@@ -37,7 +39,6 @@ public:
 	Animation* aShootingLeft;
 
 	Animation* aDying;
-
 	Animation* animation; // Referencia a la animación mostrada
 
 	Audio* audioShoot;
@@ -46,12 +47,11 @@ public:
 
 	chrono::steady_clock::time_point lastCollisionTime;
 
-	int orientation;
-	int state;
-
 	int shootCadence = 30;
 	int shootTime = 0;
 	int hearts = HEARTS;
+	int orientation;
+	int state;
 
 	bool invincible;
 
