@@ -117,6 +117,7 @@ Projectile* Player::shoot() {
 		//Para evitar el parpadeo tras disparar
 		aShootingLeft->currentFrame = 0; //"Rebobinar" animación
 		aShootingRight->currentFrame = 0; //"Rebobinar" animación
+
 		Projectile* projectile = new Projectile(x, y, game);
 
 		if (orientation == game->orientationLeft) {

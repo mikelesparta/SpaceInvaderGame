@@ -49,7 +49,7 @@ public:
 
 	int shootCadence = 30;
 	int shootTime = 0;
-	int hearts = HEARTS;
+	int hearts;
 	int orientation;
 	int state;
 

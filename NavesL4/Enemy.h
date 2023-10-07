@@ -3,6 +3,7 @@
 #include "Actor.h"
 #include "Animation.h" 
 
+#define ICONO_ENEMIGO "res/enemigo.png"
 #define ENEMIGO_MURIENDO "res/enemigo_morir.png"
 #define ENEMIGO_MOVIMIENTO "res/enemigo_movimiento.png"
 #define ICONO_ASTEROIDE "res/asteroide.png"
@@ -11,7 +12,6 @@
 class Enemy : public Actor
 {
 public:
-	//Enemy(float x, float y, Game* game);
 	Enemy(string filename, float x, float y, int widthIcon, int heightIcon, Game* game);
 
 	void draw() override; // Va a sobrescribir

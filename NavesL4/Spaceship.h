@@ -3,7 +3,7 @@
 #include "Enemy.h"
 #include "Animation.h" 
 
-#define ICONO_ENEMIGO "res/enemigo.png"
+
 
 class Spaceship : public Enemy
 {

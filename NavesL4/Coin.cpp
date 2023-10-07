@@ -10,7 +10,7 @@ Coin::Coin(float x, float y, Game* game)
 
 	animation = aMoving;
 
-	vx = 1;
+	vx = 2;
 }
 
 void Coin::update() {
@@ -25,7 +25,6 @@ void Coin::update() {
 		}
 	}
 
-	//Moverse mientars se muere
 	if (state != game->stateDying) {
 		vx = -2;
 		x = x + vx;

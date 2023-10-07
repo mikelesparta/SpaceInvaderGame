@@ -18,10 +18,10 @@
 
 #define AUDIO_AMBIENTE "res/musica_ambiente.mp3"
 #define FONDO "res/fondo.png"
-#define COIN_ICON "res/moneda_icon.png"
 #define HEART_ICON "res/corazon.png"
 #define BLUE_HEART_ICON "res/corazon_azul.png"
 #define POINTS_ICON "res/icono_puntos.png"
+#define COIN_ICON "res/moneda_icon.png"
 
 class GameLayer : public Layer
 {

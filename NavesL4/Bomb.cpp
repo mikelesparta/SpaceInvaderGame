@@ -13,7 +13,7 @@ Bomb::Bomb(float x, float y, Game* game)
 
 	animation = aMoving;
 
-	vx = 1;
+	vx = 5;
 }
 
 void Bomb::update() {
