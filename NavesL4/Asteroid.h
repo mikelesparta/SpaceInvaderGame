@@ -3,7 +3,7 @@
 #include "Enemy.h"
 #include "Animation.h" 
 
-
+#define ASTEROID_DAMAGE 2
 
 class Asteroid : public Enemy
 {

@@ -188,24 +188,22 @@ void GameLayer::update() {
 				if (!onePlayer->invincible) {
 					cout << "La nave ha colisionado con un enemigo" << endl;
 
-					if (onePlayer->hearts >= HEARTS - 2) {
-						spaceship->impacted(); //Empieza a morir
-						onePlayer->hearts--;
-						onePlayer->setInvincible(true);
+					spaceship->impacted(); //Empieza a morir
+					onePlayer->hearts -= SPACHESHIP_DAMAGE;
+					onePlayer->setInvincible(true);
 
-						if (onePlayer->image == JUGADOR1) {
-							backgroungHearts.pop_front();
-						}
-						else {
-							backgroungHeartsBlue.pop_front();
-						}
-
-						if (onePlayer->hearts == 0) {
-							onePlayer->impacted(); //Empieza a morir
-						}
-
-						checkPlayersAlive(); //Comprobar GAME OVER
+					if (onePlayer->image == JUGADOR1) {
+						backgroungHearts.pop_front();
 					}
+					else {
+						backgroungHeartsBlue.pop_front();
+					}
+
+					if (onePlayer->hearts <= 0) {
+						onePlayer->impacted(); //Empieza a morir
+					}
+
+					checkPlayersAlive(); //Comprobar GAME OVER
 				}
 				return; // Cortar el for
 			}
@@ -317,13 +315,14 @@ void GameLayer::update() {
 			if (onePlayer->isOverlap(asteroid)) {
 				if (!onePlayer->invincible) {
 					cout << "La nave ha colisionado con un asteroide" << endl;
-
+					
 					//Quitar 1 corazón	
 					if (onePlayer->hearts == HEARTS - 2) { 					
-						onePlayer->hearts--;
+						onePlayer->hearts -= ASTEROID_DAMAGE;
 
 						if (onePlayer->image == JUGADOR1) {
 							backgroungHearts.pop_front();
+
 						}
 						else {
 							backgroungHeartsBlue.pop_front();
@@ -332,8 +331,7 @@ void GameLayer::update() {
 
 					//Quitar 2 corazones	
 					else if (onePlayer->hearts >= HEARTS - 1) {
-						onePlayer->hearts--;
-						onePlayer->hearts--;
+						onePlayer->hearts -= ASTEROID_DAMAGE;
 
 						if (onePlayer->image == JUGADOR1) {
 							backgroungHearts.pop_front();
@@ -349,7 +347,7 @@ void GameLayer::update() {
 					onePlayer->setInvincible(true);
 
 					//Si no le quedan vidas al jugador, empieza a morir
-					if (onePlayer->hearts == 0) {
+					if (onePlayer->hearts <= 0) {
 						onePlayer->impacted();
 					}
 
